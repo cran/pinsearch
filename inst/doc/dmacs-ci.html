@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mark Lai" />
+
+<meta name="date" content="2026-08-26" />
+
+<title>Confidence Intervals for dMACS</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Confidence Intervals for dMACS</h1>
+<h4 class="author">Mark Lai</h4>
+<h4 class="date">2026-08-26</h4>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(pinsearch)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1131</span>)</span></code></pre></div>
+<div id="effect-size-for-noninvariance" class="section level2">
+<h2>Effect Size for Noninvariance</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="st">  visual  =~ x1 + x2 + x3</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="st">  textual =~ x4 + x5 + x6</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="st">  speed   =~ x7 + x8 + x9</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co"># Output the final partial invariance model, and the noninvariant items</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>ps1 <span class="ot">&lt;-</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="fu">pinSearch</span>(mod,</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>        <span class="at">data =</span> HolzingerSwineford1939,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>        <span class="at">group =</span> <span class="st">&quot;school&quot;</span>, <span class="at">type =</span> <span class="st">&quot;residuals&quot;</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>        <span class="at">effect_size =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    )</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>ps1</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; $`Partial Invariance Fit`</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; lavaan 0.7-2 ended normally after 64 iterations</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt;   Number of model parameters                        66</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt;   Number of equality constraints                    25</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt;   Number of observations per group:                   </span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt;     Pasteur                                        156</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt;     Grant-White                                    145</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; Model Test User Model:</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt;   Test statistic                               147.260</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt;   Degrees of freedom                                67</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt;   P-value (Chi-square)                           0.000</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt;   Test statistic for each group:</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt;     Pasteur                                     79.438</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt;     Grant-White                                 67.823</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt; $`Non-Invariant Items`</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt;   group lhs rhs       type</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt; 1     1  x3     intercepts</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; 2     1  x7     intercepts</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; $effect_size</span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt;       x3-visual  x7-speed</span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt; dmacs 0.4866004 0.4161171</span></span></code></pre></div>
+</div>
+<div id="confidence-intervals-with-resampling" class="section level2">
+<h2>Confidence Intervals with Resampling</h2>
+<div id="monte-carlo-methods" class="section level3">
+<h3>Monte Carlo Methods</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Extract the parameter estimates for dmacs input</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>lav_free <span class="ot">&lt;-</span> <span class="fu">lavInspect</span>(ps1[[<span class="dv">1</span>]])</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Index of the input parameters (item 3)</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>input_ind <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    lav_free[[<span class="dv">1</span>]]<span class="sc">$</span>lambda[<span class="dv">3</span>, <span class="dv">1</span>],</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    lav_free[[<span class="dv">1</span>]]<span class="sc">$</span>nu[<span class="dv">3</span>, <span class="dv">1</span>],</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    lav_free[[<span class="dv">2</span>]]<span class="sc">$</span>nu[<span class="dv">3</span>, <span class="dv">1</span>],</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    lav_free[[<span class="dv">1</span>]]<span class="sc">$</span>theta[<span class="dv">3</span>, <span class="dv">3</span>]</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>input_coef <span class="ot">&lt;-</span> <span class="fu">coef</span>(ps1[[<span class="dv">1</span>]])[input_ind]</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># Wrapper for computing dmacs with the input</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>my_dmacs <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="fu">dmacs</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>        <span class="at">intercepts =</span> <span class="fu">matrix</span>(x[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>        <span class="at">loadings =</span> <span class="fu">matrix</span>(x[<span class="dv">1</span>], <span class="at">nrow =</span> <span class="dv">2</span>),</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>        <span class="at">uniqueness =</span> <span class="fu">matrix</span>(x[<span class="dv">4</span>], <span class="at">nrow =</span> <span class="dv">2</span>),</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>        <span class="at">ns =</span> <span class="fu">c</span>(<span class="dv">156</span>, <span class="dv">145</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    )</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>}</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co"># Note the effect size is slightly different</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co"># using implied SD</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="fu">my_dmacs</span>(input_coef)</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; Pooled item SD is computed based on the input parameters</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt;            [,1]</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; dmacs 0.4794302</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Resample coefficients</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>num_resamp <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>resamp_coef <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">n =</span> num_resamp,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">mu =</span> input_coef,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">Sigma =</span> <span class="fu">vcov</span>(ps1[[<span class="dv">1</span>]])[input_ind, input_ind]</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co"># Resampled distribution of dmacs</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>resamp_dmacs <span class="ot">&lt;-</span> <span class="fu">apply</span>(resamp_coef, <span class="dv">1</span>, my_dmacs)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">hist</span>(resamp_dmacs)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>Bias correction</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Estimate bias</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>bias <span class="ot">&lt;-</span> <span class="fu">mean</span>(resamp_dmacs) <span class="sc">-</span> <span class="fu">my_dmacs</span>(input_coef)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; Pooled item SD is computed based on the input parameters</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># Bias corrected dMACS</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">my_dmacs</span>(input_coef) <span class="sc">-</span> bias</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; Pooled item SD is computed based on the input parameters</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;            [,1]</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; dmacs 0.4794864</span></span></code></pre></div>
+<p>Confidence Intervals</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># 95% Percentile CI</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">quantile</span>(resamp_dmacs, <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;      2.5%     97.5% </span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; 0.2679530 0.6969747</span></span></code></pre></div>
+</div>
+<div id="nonparametric-bootstrap" class="section level3">
+<h3>Nonparametric Bootstrap</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>boot_dmacs <span class="ot">&lt;-</span> <span class="fu">bootstrapLavaan</span>(ps1[[<span class="dv">1</span>]], <span class="at">R =</span> <span class="dv">1000</span>, <span class="at">FUN =</span> pin_effsize)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Bias</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>boot_bias <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(boot_dmacs, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> ps1<span class="sc">$</span>effect_size</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co"># Bias corrected dMACS</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>ps1<span class="sc">$</span>effect_size <span class="sc">-</span> boot_bias</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt;       x3-visual  x7-speed</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; dmacs 0.4748794 0.4122325</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co"># 95% Percentile CI</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>boot<span class="sc">::</span><span class="fu">boot.ci</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="fu">structure</span>(<span class="fu">list</span>(<span class="at">t0 =</span> ps1<span class="sc">$</span>effect_size,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>                   <span class="at">t =</span> boot_dmacs,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                   <span class="at">R =</span> <span class="dv">1000</span>, <span class="at">class =</span> <span class="st">&quot;boot&quot;</span>)),</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">c</span>(<span class="st">&quot;norm&quot;</span>, <span class="st">&quot;basic&quot;</span>, <span class="st">&quot;perc&quot;</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>)</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; Based on 1000 bootstrap replicates</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; CALL : </span></span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#&gt; boot::boot.ci(boot.out = structure(list(t0 = ps1$effect_size, </span></span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#&gt;     t = boot_dmacs, R = 1000, class = &quot;boot&quot;)), type = c(&quot;norm&quot;, </span></span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#&gt;     &quot;basic&quot;, &quot;perc&quot;))</span></span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a><span class="co">#&gt; Intervals : </span></span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a><span class="co">#&gt; Level      Normal              Basic              Percentile     </span></span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a><span class="co">#&gt; 95%   ( 0.2458,  0.7040 )   ( 0.2438,  0.6855 )   ( 0.2877,  0.7294 )  </span></span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a><span class="co">#&gt; Calculations and Intervals on Original Scale</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+Package: pinsearch
+Type: Package
+Title: Specification Search for Partial Factorial Invariance
+Version: 0.1.6
+Authors@R: person("Mark", "Lai", email = "marklhc@gmail.com",
+  role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-9196-7406"))
+Description: Automate specification search for identifying noninvariant
+    items in factorial invariance analyses, as described in
+    Yoon & Millsap (2007) <doi:10.1080/10705510701301677>. Models are
+    specified in 'lavaan' syntax. Supports continuous indicators with
+    loadings, intercepts, residuals (uniqueness), and residual covariances
+    invariance, and ordered categorical indicators with loadings,
+    thresholds, and residual covariances invariance.
+License: GPL-3
+Encoding: UTF-8
+Imports: lavaan, stats
+Suggests: boot, difR, knitr, MASS, rmarkdown, testthat (>= 3.0.0),
+        withr
+URL: https://github.com/marklhc/pinsearch,
+        https://marklhc.github.io/pinsearch/
+BugReports: https://github.com/marklhc/pinsearch/issues
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: R (>= 3.5.0)
+LazyData: true
+Config/roxygen2/version: 8.1.0
+NeedsCompilation: no
+Packaged: 2026-08-26 13:56:43 UTC; marklai
+Author: Mark Lai [aut, cre, cph] (ORCID:
+    <https://orcid.org/0000-0002-9196-7406>)
+Maintainer: Mark Lai <marklhc@gmail.com>
+Repository: CRAN
+Date/Publication: 2026-09-08 13:40:07 UTC

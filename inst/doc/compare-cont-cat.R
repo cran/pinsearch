@@ -1,0 +1,101 @@
+## ----include = FALSE----------------------------------------------------------
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+## ----setup--------------------------------------------------------------------
+library(pinsearch)
+library(lavaan)
+library(MASS, include.only = "mvrnorm")
+difR_ok <- suppressWarnings(
+  tryCatch(isTRUE(requireNamespace("difR", quietly = TRUE)), error = function(e) FALSE)
+)
+if (difR_ok) library(difR)
+
+## -----------------------------------------------------------------------------
+set.seed(2049)
+num_obs <- 500
+lambda1 <- seq(.9, .6, length.out = 7)
+lambda2 <- c(lambda1[1], 1, lambda1[3:7])
+cov1 <- tcrossprod(lambda1) + diag(.5, 7)
+dimnames(cov1) <- list(paste0("yy", 1:7), paste0("yy", 1:7))
+thres1 <- rbind(seq(-1.5, 0, length.out = 7),
+                seq(-0.5, 0.25, length.out = 7),
+                rep(1, 7),
+                seq(2, 2.5, length.out = 7))
+thres2 <- rbind(c(thres1[1, 1], -0.5, thres1[1, 3:6], -0.5),
+                thres1[2,],
+                c(rep(1, 3), rep(0.5, 2), rep(1, 2)),
+                thres1[4,])
+mean1 <- rep(0, 7)
+cov2 <- tcrossprod(lambda1) * 1.3 + diag(.5, 7)
+dimnames(cov2) <- dimnames(cov1)
+mean2 <- lambda1 * .4
+# Parameters:
+# Lambda
+(lam <- rbind(lambda1, lambda2))
+# Thresholds
+(nu <- rbind(setNames(c(thres1), nm = rep(1:7, each = 4)),
+             setNames(c(thres2), nm = rep(1:7, each = 4))))
+
+## -----------------------------------------------------------------------------
+(dpop <- dmacs_ordered(
+  nu,
+  loadings = lam,
+  thetas = 1,
+  link = "probit",
+  pooled_item_sd = 1,
+  latent_mean = 0,
+  latent_sd = 1
+))
+
+## -----------------------------------------------------------------------------
+ystar1 <- mvrnorm(num_obs, mu = mean1, Sigma = cov1)
+y1 <- ystar1
+for (j in seq_len(ncol(ystar1))) {
+    y1[, j] <- findInterval(ystar1[, j], thres1[, j])
+}
+ystar2 <- mvrnorm(num_obs, mu = mean2, Sigma = cov2)
+y2 <- ystar2
+for (j in seq_len(ncol(ystar2))) {
+    y2[, j] <- findInterval(ystar2[, j], thres2[, j])
+}
+df <- rbind(cbind(y1, group = 1), cbind(y2, group = 2))
+
+## -----------------------------------------------------------------------------
+contfit <- cfa(' f =~ yy1 + yy2 + yy3 + yy4 + yy5 + yy6 + yy7 ',
+               data = df, group = "group",
+               group.equal = c("loadings", "intercepts"),
+               group.partial = c("yy2~1", "yy4~1",
+                                 "yy5~1", "yy7~1"))
+(dcont <- pin_effsize(contfit))
+
+ps_cat <- pinSearch(' f =~ yy1 + yy2 + yy3 + yy4 + yy5 + yy6 + yy7 ',
+                    data = df, group = "group", type = "thresholds",
+                    ordered = paste0("yy", 1:7))
+(dcat <- pin_effsize(ps_cat$`Partial Invariance Fit`))
+
+## -----------------------------------------------------------------------------
+data.frame(
+  rbind(continuous = dcont[1, ],
+        categorical = dcat[1, ],
+        population = dpop[c(2, 4, 5, 7)])
+)
+
+## -----------------------------------------------------------------------------
+# Dichotomous data (0, 1, 2 recoded to 0; 3, 4 recoded to 1)
+df2 <- df
+df2[, 1:7] <- as.integer(df2[, 1:7] >= 3)
+
+## -----------------------------------------------------------------------------
+ps2_cat <- pinSearch(' f =~ yy1 + yy2 + yy3 + yy4 + yy5 + yy6 + yy7 ',
+                     data = df2, group = "group", type = "thresholds",
+                     ordered = paste0("yy", 1:7))
+(dcat <- pin_effsize(ps2_cat$`Partial Invariance Fit`))
+
+## -----------------------------------------------------------------------------
+if (difR_ok) {
+  difMH(df2, group = "group", focal.name = 1, purify = TRUE)
+}
+
