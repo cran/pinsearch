@@ -12,7 +12,7 @@
 
 <meta name="author" content="Mark Lai" />
 
-<meta name="date" content="2026-08-26" />
+<meta name="date" content="2026-11-19" />
 
 <title>Using Contrasts</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Using Contrasts</h1>
 <h4 class="author">Mark Lai</h4>
-<h4 class="date">2026-08-26</h4>
+<h4 class="date">2026-11-19</h4>
 
 
 
@@ -614,19 +614,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co"># fmacs by gender</span></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>(f_gender <span class="ot">&lt;-</span> <span class="fu">pin_effsize</span>(ps[[<span class="dv">1</span>]], <span class="at">group_factor =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>)))</span>
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;        class1-f1  class2-f1 class3-f1  class4-f1  class5-f1  class6-f1</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; fmacs 0.03579041 0.03298516 0.1443592 0.02713531 0.03031336 0.04858438</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;       class7-f1  class8-f1 class9-f1 class10-f1 class11-f1 class12-f1</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; fmacs 0.0282448 0.03521963  0.083309 0.04836829 0.01813981 0.01888187</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; fmacs 0.06814736 0.06280597 0.1114111 0.05166747 0.02464726 0.02665297</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;        class7-f1  class8-f1  class9-f1 class10-f1 class11-f1 class12-f1</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; fmacs 0.05378001 0.03642427 0.06639479  0.0814863 0.01528011 0.01762211</span></span>
 <span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt;       class13-f1 class14-f1 class15-f1</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; fmacs 0.02702558 0.03136801 0.04376062</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; fmacs 0.04553013 0.08604443 0.06761069</span></span>
 <span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co"># fmacs by ethnicity</span></span>
 <span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>(f_eth <span class="ot">&lt;-</span> <span class="fu">pin_effsize</span>(ps[[<span class="dv">1</span>]], <span class="at">group_factor =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)))</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;       class1-f1  class2-f1 class3-f1  class4-f1  class5-f1 class6-f1  class7-f1</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; fmacs 0.0580995 0.05354566 0.1249914 0.04404945 0.01246479 0.1131955 0.04585051</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;        class8-f1  class9-f1 class10-f1 class11-f1 class12-f1 class13-f1</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; fmacs 0.08975193 0.07570749 0.07851749 0.02558737 0.08675476 0.04387133</span></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;       class14-f1 class15-f1</span></span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; fmacs 0.07596325  0.1148166</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;        class1-f1  class2-f1 class3-f1  class4-f1   class5-f1 class6-f1</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; fmacs 0.08396316 0.07738212 0.1288057 0.06365856 0.004374682 0.1440968</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;        class7-f1 class8-f1  class9-f1 class10-f1 class11-f1 class12-f1</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; fmacs 0.06626139 0.1081644 0.05912659 0.05187221 0.01945114 0.06269477</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;       class13-f1 class14-f1 class15-f1</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; fmacs 0.02898338  0.1177206 0.09497407</span></span>
 <span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co"># interaction (using contrast matrix)</span></span>
 <span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>contr <span class="ot">&lt;-</span> <span class="fu">local</span>({</span>
 <span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>    gen <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>))</span>
@@ -668,106 +668,106 @@ sizes</caption>
 <tr class="odd">
 <td align="left">Item 1</td>
 <td align="right">0.12</td>
-<td align="right">0.04</td>
-<td align="right">0.06</td>
+<td align="right">0.07</td>
+<td align="right">0.08</td>
 <td align="right">0.06</td>
 </tr>
 <tr class="even">
 <td align="left">Item 2</td>
 <td align="right">0.11</td>
-<td align="right">0.03</td>
-<td align="right">0.05</td>
+<td align="right">0.06</td>
+<td align="right">0.08</td>
 <td align="right">0.05</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 3</td>
 <td align="right">0.24</td>
-<td align="right">0.14</td>
-<td align="right">0.12</td>
+<td align="right">0.11</td>
+<td align="right">0.13</td>
 <td align="right">0.16</td>
 </tr>
 <tr class="even">
 <td align="left">Item 4</td>
 <td align="right">0.09</td>
-<td align="right">0.03</td>
-<td align="right">0.04</td>
+<td align="right">0.05</td>
+<td align="right">0.06</td>
 <td align="right">0.04</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 5</td>
 <td align="right">0.05</td>
-<td align="right">0.03</td>
-<td align="right">0.01</td>
+<td align="right">0.02</td>
+<td align="right">0.00</td>
 <td align="right">0.04</td>
 </tr>
 <tr class="even">
 <td align="left">Item 6</td>
 <td align="right">0.19</td>
-<td align="right">0.05</td>
-<td align="right">0.11</td>
+<td align="right">0.03</td>
+<td align="right">0.14</td>
 <td align="right">0.11</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 7</td>
 <td align="right">0.09</td>
-<td align="right">0.03</td>
 <td align="right">0.05</td>
+<td align="right">0.07</td>
 <td align="right">0.05</td>
 </tr>
 <tr class="even">
 <td align="left">Item 8</td>
 <td align="right">0.17</td>
 <td align="right">0.04</td>
-<td align="right">0.09</td>
+<td align="right">0.11</td>
 <td align="right">0.13</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 9</td>
 <td align="right">0.11</td>
-<td align="right">0.08</td>
-<td align="right">0.08</td>
+<td align="right">0.07</td>
+<td align="right">0.06</td>
 <td align="right">0.08</td>
 </tr>
 <tr class="even">
 <td align="left">Item 10</td>
 <td align="right">0.13</td>
-<td align="right">0.05</td>
 <td align="right">0.08</td>
+<td align="right">0.05</td>
 <td align="right">0.08</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 11</td>
 <td align="right">0.04</td>
 <td align="right">0.02</td>
-<td align="right">0.03</td>
+<td align="right">0.02</td>
 <td align="right">0.03</td>
 </tr>
 <tr class="even">
 <td align="left">Item 12</td>
 <td align="right">0.11</td>
 <td align="right">0.02</td>
-<td align="right">0.09</td>
+<td align="right">0.06</td>
 <td align="right">0.09</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 13</td>
 <td align="right">0.07</td>
+<td align="right">0.05</td>
 <td align="right">0.03</td>
-<td align="right">0.04</td>
 <td align="right">0.04</td>
 </tr>
 <tr class="even">
 <td align="left">Item 14</td>
 <td align="right">0.19</td>
-<td align="right">0.03</td>
-<td align="right">0.08</td>
+<td align="right">0.09</td>
+<td align="right">0.12</td>
 <td align="right">0.12</td>
 </tr>
 <tr class="odd">
 <td align="left">Item 15</td>
 <td align="right">0.14</td>
-<td align="right">0.04</td>
-<td align="right">0.11</td>
+<td align="right">0.07</td>
+<td align="right">0.09</td>
 <td align="right">0.08</td>
 </tr>
 </tbody>

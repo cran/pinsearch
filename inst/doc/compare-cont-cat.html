@@ -346,7 +346,7 @@ Categorical Data</h1>
 treating Likert-scale items as either continuous or ordinal.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(pinsearch)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; This is lavaan 0.7-2</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; This is lavaan 0.7-3</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(MASS, <span class="at">include.only =</span> <span class="st">&quot;mvrnorm&quot;</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>difR_ok <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
@@ -424,7 +424,7 @@ treating Likert-scale items as either continuous or ordinal.</p>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>                    <span class="at">ordered =</span> <span class="fu">paste0</span>(<span class="st">&quot;yy&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>))</span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; Warning: lavaan-&gt;lav_model_vcov():  </span></span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt;    The variance-covariance matrix of the estimated parameters (vcov) does not </span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;    appear to be positive definite! The smallest eigenvalue (= 3.837654e-17) </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt;    appear to be positive definite! The smallest eigenvalue (= 5.227635e-17) </span></span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt;    is close to zero. This may be a symptom that the model is not identified.</span></span>
 <span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>(dcat <span class="ot">&lt;-</span> <span class="fu">pin_effsize</span>(ps_cat<span class="sc">$</span><span class="st">`</span><span class="at">Partial Invariance Fit</span><span class="st">`</span>))</span>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;           yy2-f     yy4-f     yy5-f     yy7-f</span></span>
@@ -445,13 +445,9 @@ treating Likert-scale items as either continuous or ordinal.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>ps2_cat <span class="ot">&lt;-</span> <span class="fu">pinSearch</span>(<span class="st">&#39; f =~ yy1 + yy2 + yy3 + yy4 + yy5 + yy6 + yy7 &#39;</span>,</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                     <span class="at">data =</span> df2, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>, <span class="at">type =</span> <span class="st">&quot;thresholds&quot;</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                     <span class="at">ordered =</span> <span class="fu">paste0</span>(<span class="st">&quot;yy&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>))</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; Warning: lavaan-&gt;lav_model_vcov():  </span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;    The variance-covariance matrix of the estimated parameters (vcov) does not </span></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt;    appear to be positive definite! The smallest eigenvalue (= 4.822995e-16) </span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt;    is close to zero. This may be a symptom that the model is not identified.</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>(dcat <span class="ot">&lt;-</span> <span class="fu">pin_effsize</span>(ps2_cat<span class="sc">$</span><span class="st">`</span><span class="at">Partial Invariance Fit</span><span class="st">`</span>))</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt;           yy4-f     yy5-f</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; dmacs 0.3136211 0.4030317</span></span></code></pre></div>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>(dcat <span class="ot">&lt;-</span> <span class="fu">pin_effsize</span>(ps2_cat<span class="sc">$</span><span class="st">`</span><span class="at">Partial Invariance Fit</span><span class="st">`</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt;           yy4-f     yy5-f</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; dmacs 0.3136211 0.4030317</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="cf">if</span> (difR_ok) {</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">difMH</span>(df2, <span class="at">group =</span> <span class="st">&quot;group&quot;</span>, <span class="at">focal.name =</span> <span class="dv">1</span>, <span class="at">purify =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>}</span>

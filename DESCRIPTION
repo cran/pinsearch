@@ -1,7 +1,7 @@
 Package: pinsearch
 Type: Package
 Title: Specification Search for Partial Factorial Invariance
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: person("Mark", "Lai", email = "marklhc@gmail.com",
   role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0002-9196-7406"))
 Description: Automate specification search for identifying noninvariant
@@ -23,11 +23,11 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 Depends: R (>= 3.5.0)
 LazyData: true
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
 NeedsCompilation: no
-Packaged: 2026-08-26 13:56:43 UTC; marklai
+Packaged: 2026-11-19 08:02:26 UTC; marklai
 Author: Mark Lai [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0002-9196-7406>)
 Maintainer: Mark Lai <marklhc@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-09-08 13:40:07 UTC
+Date/Publication: 2026-11-19 08:20:02 UTC
